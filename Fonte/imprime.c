@@ -50,10 +50,14 @@ printf("adsas\n");
     for(j=0; j < globalParserSelect.col_count; j++){
         printf("%s\n",esquema->nome);
     }
-
-    if(!(globalDataSelect.columnName[0][0] == '*')){
+//PARTE COM PROBLEMAS
+//O IMPORTANTE EH CRIAR UMA NOVA ESTRUTURA PRA PODER ADICIONAR OS VALOQUES QUE AGNT QUER
+// NO CASO, QUERO CRIAR UMA NOVA VERSAO DA VARIAVEL esquema
+//pra poder passar adiante
+    if(!(globalDataSelect.columnName[0][0] == '*')){//se nao for um * faz o if
         tp_table *aux,*aux2;
         tp_table *novoEsquema;
+
 
         int i=0;
         for(aux = esquema; aux != NULL; aux = aux->next){
@@ -64,15 +68,15 @@ printf("adsas\n");
 
                     if(novoEsquema->first==NULL){
                         aux2  = malloc(sizeof(tp_table));
-                        aux2 ->next = NULL;
-                        novoEsquema->first = aux2;
-
+                        novoEsquema->next = NULL;
+                        novoEsquema->first = &aux2;
+                       
                         printf("%s----\n",novoEsquema->nome);
                     }else{
                         aux2  = malloc(sizeof(tp_table));
                         aux2 -> next = NULL;
                         aux2 = aux;
-                        novoEsquema->next = aux2;
+                        novoEsquema->next = &aux2;
 
                         printf("%s----2\n",novoEsquema->nome);
 
@@ -107,6 +111,8 @@ printf("adsas\n");
     }
 
     printf("auqi\n");
+
+    //ATEH AQUI EU MEXI, TA DANDO PAU
 	while(x){
 	    column *pagina = getPage(bufferpoll, esquema, objeto, p);
 	    if(pagina == ERRO_PARAMETRO){
