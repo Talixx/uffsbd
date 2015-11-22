@@ -56,13 +56,16 @@ printf("adsas\n");
 //pra poder passar adiante
     if(!(globalDataSelect.columnName[0][0] == '*')){//se nao for um * faz o if
         tp_table *aux,*aux2;
-        tp_table *novoEsquema;
+        tp_table *novoEsquema = malloc(sizeof(tp_table)); 
+
 
 
         int i=0;
         for(aux = esquema; aux != NULL; aux = aux->next){
             for(i=0;i<globalParserSelect.col_count;i++){
                 if(!strcmp(aux->nome,globalDataSelect.columnName[i])){
+
+
                     printf("%s----%s\n",aux->nome,globalDataSelect.columnName[i]);
         
 

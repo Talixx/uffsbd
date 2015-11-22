@@ -103,7 +103,7 @@ insert: INSERT INTO {setMode(OP_INSERT);} table opt_column_list VALUES parentesi
 };
 //SELECT CODIGO,NOME FROM CLIENTES WHERE UF = ‘RJ’                      OR (UF = ‘SP’ AND ATIVO = ‘N’) 
 /* SELECT */
-select: SELECT {setMode(OP_SELECT);} opt_column_list_select FROM table_select WHERE value_select condition attr_select semicolon {
+select: SELECT {setMode(OP_SELECT);} opt_column_list_select FROM table_select where where_clause semicolon {
     return 0;
 };
 
@@ -133,7 +133,13 @@ condition: /*optional*/ |'=' {setCondition(yytext);};
                         | '>'{setCondition(yytext);};
                         |'<' {setCondition(yytext);}; ;
 
-//where_clause: value_select attr_select;
+where:  /*optional*/  | WHERE; 
+
+where_clause: value_select condition attr_select; 
+
+where_clause_list: /*optional*/  | where_clause | where_clause andOr where_clause_list;
+
+andOr: AND | OR;
 
 value_list: value | value ',' value_list;
 
