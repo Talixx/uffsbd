@@ -9,7 +9,7 @@
 
 void imprime(rc_parser globalParserSelect,rc_select globalDataSelect) {
 
-    int j,erro, x, p, cont=0;
+    int i,j,erro, x, p, cont=0;
     struct fs_objects objeto;
 
     
@@ -38,6 +38,27 @@ void imprime(rc_parser globalParserSelect,rc_select globalDataSelect) {
         printf("ERROR: no memory available to allocate buffer.\n");
         return;
     }
+    for (i = 0; i < objeto.qtdCampos ; ++i)
+        esquema[i].pos = i;
+    if(!(globalDataSelect.columnName[0][0] == '*')){//se nao for um * faz o if
+        tp_table *aux;
+        tp_table *novoEsquema = (tp_table *)malloc(sizeof(tp_table)*(objeto.qtdCampos+1)); // Aloca esquema com a quantidade de campos necessarios.
+
+        i=0,j=0;
+        for(aux = esquema; aux != NULL; aux = aux->next){
+            for(i=0;i<globalParserSelect.col_count;i++){
+                if(!strcmp(aux->nome,globalDataSelect.columnName[i])){        
+                    novoEsquema[j++] = *aux;
+                }
+            }
+        }
+        esquema = novoEsquema;
+        objeto.qtdCampos = globalParserSelect.col_count;
+        objeto.qtdCamposSelect = globalParserSelect.col_count;
+
+    }
+
+    objeto.qtdCamposSelect = objeto.qtdCampos;
 
     erro = SUCCESS;
     for(x = 0; erro == SUCCESS; x++)
@@ -46,76 +67,8 @@ void imprime(rc_parser globalParserSelect,rc_select globalDataSelect) {
     int ntuples = --x;
 	p = 0;
 
-printf("adsas\n");
-    for(j=0; j < globalParserSelect.col_count; j++){
-        printf("%s\n",esquema->nome);
-    }
-//PARTE COM PROBLEMAS
-//O IMPORTANTE EH CRIAR UMA NOVA ESTRUTURA PRA PODER ADICIONAR OS VALOQUES QUE AGNT QUER
-// NO CASO, QUERO CRIAR UMA NOVA VERSAO DA VARIAVEL esquema
-//pra poder passar adiante
-    if(!(globalDataSelect.columnName[0][0] == '*')){//se nao for um * faz o if
-        tp_table *aux,*aux2;
-        tp_table *novoEsquema = malloc(sizeof(tp_table)); 
+    
 
-
-
-        int i=0;
-        for(aux = esquema; aux != NULL; aux = aux->next){
-            for(i=0;i<globalParserSelect.col_count;i++){
-                if(!strcmp(aux->nome,globalDataSelect.columnName[i])){
-
-
-                    printf("%s----%s\n",aux->nome,globalDataSelect.columnName[i]);
-        
-
-                    if(novoEsquema->first==NULL){
-                        aux2  = malloc(sizeof(tp_table));
-                        novoEsquema->next = NULL;
-                        novoEsquema->first = &aux2;
-                       
-                        printf("%s----\n",novoEsquema->nome);
-                    }else{
-                        aux2  = malloc(sizeof(tp_table));
-                        aux2 -> next = NULL;
-                        aux2 = aux;
-                        novoEsquema->next = &aux2;
-
-                        printf("%s----2\n",novoEsquema->nome);
-
-                    }
-
-                    
-
-
-                    //novoEsquema = aux;
-
-                    /*char nome[TAMANHO_NOME_CAMPO];  // Nome do Campo.                    40bytes
-                    char tipo;                      // Tipo do Campo.                     1bytes
-                    int tam;                        // Tamanho do Campo.                  4bytes
-                    int chave;                      // Tipo da chave                      4bytes
-                    char tabelaApt[TAMANHO_NOME_TABELA]; //Nome da Tabela Apontada        20bytes
-                    char attApt[TAMANHO_NOME_CAMPO];    //Nome do Atributo Apontado       40bytes
-                    struct tp_table *next;          // Encadeamento para o próximo campo.*/
-                }
-            }
-        }
-        //esquema = novoEsquema->first;
-        //objeto.qtdCampos = globalParserSelect.col_count;
-        for(aux = novoEsquema->first; aux != NULL; aux = aux->next){
-            printf("####%s\n",aux->nome);
-            printf("***%c\n",aux->tipo);
-            printf("***%d\n",aux->tam);
-            printf("***%d\n",aux->chave);
-
-        }
-
-
-    }
-
-    printf("auqi\n");
-
-    //ATEH AQUI EU MEXI, TA DANDO PAU
 	while(x){
 	    column *pagina = getPage(bufferpoll, esquema, objeto, p);
 	    if(pagina == ERRO_PARAMETRO){

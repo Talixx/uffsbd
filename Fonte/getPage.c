@@ -30,25 +30,25 @@ column * getPage(tp_buffer *buffer, tp_table *campos, struct fs_objects objeto, 
 
     if (!buffer[page].position)
         return colunas;
-
-    while(i < buffer[page].position){
-        t=0;
+    while(i < objeto.qtdCamposSelect){
         if(j >= objeto.qtdCampos)
             j=0;
-
         colunas[h].valorCampo = (char *)malloc(sizeof(char)*campos[j].tam+1);
         memset(colunas[h].valorCampo, '\0', campos[j].tam+1);
         colunas[h].tipoCampo = campos[j].tipo;  //Guarda tipo do campo
 
         strcpy(colunas[h].nomeCampo, campos[j].nome); //Guarda nome do campo
+        strcpy(colunas[h].valorCampo, campos[j].valor); //Guarda nome do campo
 
-        while(t < campos[j].tam){
+
+        /*while(t < campos[j].tam){
             colunas[h].valorCampo[t] = buffer[page].data[i]; //Copia os dados
             t++;
             i++;
         }
-        colunas[h].valorCampo[t] = '\0';
+        colunas[h].valorCampo[t] = '\0';*/
 
+        i++;
         h++;
         j++;
     }

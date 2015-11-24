@@ -5,6 +5,7 @@
 char *getTupla(tp_table *campos,struct fs_objects objeto, int from){ //Pega uma tupla do disco a partir do valor de from
 
     int tamTpl = tamTupla(campos, objeto);
+    int i;
     char *linha=(char *)malloc(sizeof(char)*tamTpl);
     memset(linha, '\0', tamTpl);
 
@@ -23,7 +24,7 @@ char *getTupla(tp_table *campos,struct fs_objects objeto, int from){ //Pega uma 
         return ERRO_DE_LEITURA;
     }
 
-    fseek(dados, from, 1);
+    /*fseek(dados, from, 1);
     if(fgetc (dados) != EOF){
         fseek(dados, -1, 1);
         fread(linha, sizeof(char), tamTpl, dados); //Traz a tupla inteira do arquivo
@@ -31,7 +32,13 @@ char *getTupla(tp_table *campos,struct fs_objects objeto, int from){ //Pega uma 
         fclose(dados);
         free(linha);
         return ERRO_DE_LEITURA;
-    }
+    }*/
+    for (i = 0; i < objeto.qtdCamposSelect; ++i){
+        fseek(dados, (campos[i].tam*campos[i].pos),SEEK_SET);
+        campos[i].valor = malloc(sizeof(char)*campos[i].tam);
+        fread(campos[i].valor,sizeof(char),campos[i].tam,dados);
+        strcat(linha,campos[i].valor);
+    }   
 
     fclose(dados);
     return linha;

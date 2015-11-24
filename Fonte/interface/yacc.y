@@ -103,7 +103,7 @@ insert: INSERT INTO {setMode(OP_INSERT);} table opt_column_list VALUES parentesi
 };
 //SELECT CODIGO,NOME FROM CLIENTES WHERE UF = ‘RJ’                      OR (UF = ‘SP’ AND ATIVO = ‘N’) 
 /* SELECT */
-select: SELECT {setMode(OP_SELECT);} opt_column_list_select FROM table_select where where_clause semicolon {
+select: SELECT {setMode(OP_SELECT);} opt_column_list_select FROM table_select where where_clause_list semicolon {
     return 0;
 };
 

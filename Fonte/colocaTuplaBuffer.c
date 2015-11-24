@@ -2,6 +2,9 @@
 #include "buffend.h"
 
 int colocaTuplaBuffer(tp_buffer *buffer, int from, tp_table *campos, struct fs_objects objeto){//Define a página que será incluida uma nova tupla
+    if(from == (objeto.qtdCamposSelect)){
+        return ERRO_LEITURA_DADOS;
+    }
 
     char *tupla = getTupla(campos,objeto,from);
 
