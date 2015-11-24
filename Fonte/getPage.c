@@ -26,7 +26,7 @@ column * getPage(tp_buffer *buffer, tp_table *campos, struct fs_objects objeto, 
 
     memset(colunas, 0, sizeof(column)*objeto.qtdCampos*(buffer[page].nrec));
 
-    int i=0, j=0, t=0, h=0;
+    int i=0, j=0, h=0;
 
     if (!buffer[page].position)
         return colunas;
